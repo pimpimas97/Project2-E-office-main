@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/username/your-laravel-repo.git'
+                git branch: 'main', url: 'https://github.com/pimpimas97/Project2-E-office-main.git'
             }
         }
 
