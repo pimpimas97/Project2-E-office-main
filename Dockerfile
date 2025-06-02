@@ -1,6 +1,7 @@
+# Gunakan image resmi PHP versi 8.2 CLI
 FROM php:8.2-cli
 
-# Install dependensi sistem dan ekstensi PHP
+# Install dependensi sistem & ekstensi PHP
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -16,21 +17,25 @@ RUN apt-get update && apt-get install -y \
         pdo_mysql \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install Composer
+# Install Composer secara global
 RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
 
-# Set direktori kerja
+# Set direktori kerja di dalam container
 WORKDIR /var/www
 
-# Salin semua file dari lokal ke dalam container
+# Salin semua file aplikasi Laravel ke container
 COPY . .
 
 # Install dependensi Laravel
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Expose port Laravel
+# Pastikan permission storage dan bootstrap/cache benar (opsional)
+RUN chown -R www-data:www-data storage bootstrap/cache && \
+    chmod -R 775 storage bootstrap/cache
+
+# Buka port 8000 untuk Laravel Artisan serve
 EXPOSE 8000
 
-# Jalankan Laravel saat container dijalankan
+# Jalankan Laravel menggunakan artisan serve
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
