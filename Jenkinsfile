@@ -9,14 +9,15 @@ pipeline {
         }
 
         stage('Build Docker image') {
-            steps {
-                sh 'docker build -t laravel-app .'
-            }
-        }
+    steps {
+        bat 'docker build -t nama-image .'
+    }
+}
+
 
         stage('Run Docker container') {
             steps {
-                sh 'docker run -d -p 8000:8000 laravel-app'
+                bat 'docker run -d -p 8000:8000 laravel-app'
             }
         }
     }
